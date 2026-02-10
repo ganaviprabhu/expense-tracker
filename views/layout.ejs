@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title || "Expense Tracker" %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <% if (user) { %>
+    <p>Welcome, <%= user.username %></p>
+    <nav>
+      <a href="/expenses">Expenses</a>
+      <a href="/expenses/new">Add Expense</a>
+      <form action="/logout" method="POST" style="display:inline;">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  <% } else { %>
+    <nav>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    </nav>
+  <% } %>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+
+  <%- body %>
+
+</body>
+</html>

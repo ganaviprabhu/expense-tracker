@@ -1,0 +1,43 @@
+<h2><%= expense ? 'Edit' : 'Add' %> Expense</h2>
+
+<form action="/expenses" method="POST">
+  <label>Title:</label>
+  <input
+    type="text"
+    name="title"
+    placeholder="Title"
+    value="<%= expense?.title || '' %>"
+    required
+  >
+
+  <label>Amount:</label>
+  <input
+    type="number"
+    name="amount"
+    placeholder="Amount"
+    value="<%= expense?.amount || '' %>"
+    required
+  >
+
+  <label>Date:</label>
+  <input
+    type="date"
+    name="date"
+    value="<%= expense?.date ? expense.date.toISOString().split('T')[0] : '' %>"
+    required
+  >
+
+  <label>Category</label>
+  <select name="categoryId" required>
+    <% categories.forEach(c => { %>
+      <option
+        value="<%= c.id %>"
+        <%= expense && c.id === expense.CategoryId ? 'selected' : '' %>
+      >
+        <%= c.name %>
+      </option>
+    <% }) %>
+  </select>
+
+  <button>Save</button>
+</form>

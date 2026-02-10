@@ -1,0 +1,33 @@
+<h2>My Expenses</h2>
+
+<a href="/expenses/new">+ Add Expense</a>
+
+<ul>
+  <% expenses.forEach(e => { %>
+    <li>
+      <strong><%= e.title %></strong> –
+      ₹<%= e.amount %> –
+      <%= e.date.toDateString() %> –
+      <%= e.Category ? e.Category.name : 'No category' %>
+      <!-- EDIT FORM -->
+      <form 
+        action="/expenses/<%= e.id %>/edit" 
+        method="GET"
+        style="display:inline;">
+
+        <button type="submit" style="color:blue;">Edit</button>
+      </form>
+      
+      <!-- DELETE BUTTON -->
+      <form 
+        action="/expenses/<%= e.id %>/delete" 
+        method="POST" 
+        style="display:inline;"
+      >
+        <button type="submit" style="color:red;">
+          Delete
+        </button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
