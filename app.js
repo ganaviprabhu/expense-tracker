@@ -201,6 +201,29 @@ app.post('/expenses/:id/delete', authenticate, async (req, res) => {
     res.send('Error deleting expense');
   }
 });
+ //Edit expense
+// GET /expenses/:id/edit — show the edit form
+app.get('/expenses/:id/edit', authenticate, async (req, res) => {
+  try {
+    const expense = await Expense.findByPk(req.params.id);
+    if (!expense) return res.send('Expense not found');
+
+    // Make sure the user owns this expense
+    if (expense.UserId !== req.user.id) return res.status(403).send('Forbidden');
+
+    const categories = await Category.findAll();
+
+    res.render('expense-form', {
+      title: 'Edit Expense',
+      expense,            // pass the expense to pre-fill the form
+      categories,         // all categories for dropdown
+      action: `/expenses/${expense.id}?_method=PUT`  // form will submit here
+    });
+  } catch (err) {
+    console.error(err);
+    res.send('Error loading expense');
+  }
+});
 
 
 
