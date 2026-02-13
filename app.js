@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const expressLayouts = require('express-ejs-layouts');
+const methodOverride = require('method-override');
+
 
 const { sequelize, User, Category, Expense } = require('./models');
 
@@ -26,6 +28,9 @@ app.use((req, res, next) => {
   res.locals.error = null;
   next();
 });
+
+app.use(express.json());
+app.use(methodOverride('_method'));
 
 /* JWT AUTH MIDDLEWARE*/
 
@@ -201,29 +206,55 @@ app.post('/expenses/:id/delete', authenticate, async (req, res) => {
     res.send('Error deleting expense');
   }
 });
+
  //Edit expense
-// GET /expenses/:id/edit — show the edit form
 app.get('/expenses/:id/edit', authenticate, async (req, res) => {
+  const expense = await Expense.findByPk(req.params.id);
+  if (!expense) return res.send('Expense not found');
+
+  if (expense.UserId !== req.user.id) return res.status(403).send('Forbidden');
+
+  const categories = await Category.findAll();
+
+  res.render('expense-form', {
+    title: 'Edit Expense',
+    expense,
+    categories,
+    action: `/expenses/${expense.id}?_method=PUT`
+  });
+});
+
+app.put('/expenses/:id', authenticate, async (req, res) => {
   try {
     const expense = await Expense.findByPk(req.params.id);
-    if (!expense) return res.send('Expense not found');
 
-    // Make sure the user owns this expense
-    if (expense.UserId !== req.user.id) return res.status(403).send('Forbidden');
+    if (!expense) {
+      return res.status(404).json({ message: 'Expense not found' });
+    }
 
-    const categories = await Category.findAll();
+    // Ownership check
+    if (expense.UserId !== req.user.id) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
 
-    res.render('expense-form', {
-      title: 'Edit Expense',
-      expense,            // pass the expense to pre-fill the form
-      categories,         // all categories for dropdown
-      action: `/expenses/${expense.id}?_method=PUT`  // form will submit here
+    // Update fields
+    await expense.update({
+      title: req.body.title,
+      amount: req.body.amount,
+      date: req.body.date,
+      CategoryId: req.body.categoryId
     });
+
+   res.redirect('/expenses');
+
   } catch (err) {
     console.error(err);
-    res.send('Error loading expense');
+    res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+
 
 
 
