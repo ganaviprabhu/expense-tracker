@@ -2,6 +2,7 @@
 <html>
 <head>
   <title><%= title || "Expense Tracker" %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -10,7 +11,6 @@
     <p>Welcome, <%= user.username %></p>
     <nav>
       <a href="/expenses">Expenses</a>
-      <a href="/expenses/new">Add Expense</a>
       <form action="/logout" method="POST" style="display:inline;">
         <button type="submit">Logout</button>
       </form>

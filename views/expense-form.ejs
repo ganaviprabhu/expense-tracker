@@ -1,11 +1,14 @@
 <h2><%= expense ? 'Edit' : 'Add' %> Expense</h2>
 
-<form action="<%= action %>" method="POST">
+<form class="main-form" action="<%= action %>" method="POST">
+  <% if (expense) { %>
+    <input type="hidden" name="_method" value="PUT">
+  <% } %>
+
   <label>Title:</label>
   <input
     type="text"
     name="title"
-    placeholder="Title"
     value="<%= expense?.title || '' %>"
     required
   >
@@ -14,7 +17,6 @@
   <input
     type="number"
     name="amount"
-    placeholder="Amount"
     value="<%= expense?.amount || '' %>"
     required
   >
@@ -27,7 +29,7 @@
     required
   >
 
-  <label>Category</label>
+  <label>Category:</label>
   <select name="categoryId" required>
     <% categories.forEach(c => { %>
       <option
@@ -39,5 +41,5 @@
     <% }) %>
   </select>
 
-  <button>Save</button>
+  <button type="submit">Save</button>
 </form>

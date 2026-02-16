@@ -23,6 +23,7 @@
     "method-override": "^3.0.0",
     "pg": "^8.18.0",
     "pg-hstore": "^2.3.4",
+    "react-icons": "^5.5.0",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {

@@ -1,14 +1,16 @@
 <h1>Welcome to Expense Tracker</h1>
 
-<p class="success">This is a success message example!</p>
-<p class="error">This is an error message example!</p>
 
-<form action="/expenses/new" method="POST">
+<form action="/expenses" method="POST">
   <label for="title">Expense Title</label>
   <input type="text" id="title" name="title" placeholder="Enter title">
 
   <label for="amount">Amount</label>
   <input type="number" id="amount" name="amount" placeholder="Enter amount">
+
+  <label for="date">Date:</label>
+  <input type="date" id="date" name="date" value=""
+  >
 
   <label for="category">Category</label>
   <select id="category" name="category">

@@ -1,15 +1,7 @@
-/* Reset */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-}
-
 
 body {
   margin: 0;
@@ -17,12 +9,19 @@ body {
   background: #f5f5f5;
 }
 
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
 /* Navigation */
 nav {
   margin-bottom: 20px;
   position: relative;
   z-index: 1000;
-
 }
 
 nav a {
@@ -38,15 +37,21 @@ nav button {
   color: #c00;
   cursor: pointer;
   font-weight: bold;
+  margin: 0; /* prevent global spacing */
 }
 
 /* Forms */
-form {
+.main-form {
   max-width: 400px;
   background: #fff;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
 }
+.actions form {
+  all: unset;          /* removes inherited form styles */
+  display: inline;     /* keeps layout inline */
+}
+
 
 label {
   display: block;
@@ -60,10 +65,64 @@ select {
   margin-top: 5px;
 }
 
+/* Default button (for normal buttons only) */
 button {
   margin-top: 15px;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+/* Expense List Item */
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #fff;
+  transition: background 0.2s ease;
+}
+
+.expense-item:hover {
+  background: #f0f0f0;
+}
+
+/* Action buttons container */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Icon buttons (edit/delete) */
+.icon-btn {
+  background: transparent !important;
+  border: none !important;
+  padding: 6px !important;
+  margin: 0 !important; /* removes global margin-top */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.05);
+}
+
+.icon-btn:focus {
+  outline: none;
+}
+
+.edit-icon {
+  color: #2563eb;
+}
+
+.delete-icon {
+  color: #dc2626;
 }
 
 /* Tables */
@@ -82,7 +141,7 @@ td {
 th {
   background: #eee;
 }
- 
+
 /* Messages */
 .error {
   color: red;

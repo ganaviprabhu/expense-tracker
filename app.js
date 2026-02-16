@@ -153,11 +153,19 @@ app.get('/expenses', authenticate, async (req, res) => {
     order: [['date', 'DESC']]
   });
 
+
+  
+  const totalExpense = expenses.reduce((sum, e) => {
+    return sum + parseFloat(e.amount || 0);
+  }, 0);
+
   res.render('expenses', {
     title: 'Expenses',
-    expenses
+    expenses,
+    totalExpense
   });
 });
+
 
 // New expense form
 app.get('/expenses/new', authenticate, async (req, res) => {
@@ -208,36 +216,28 @@ app.post('/expenses/:id/delete', authenticate, async (req, res) => {
 });
 
  //Edit expense
-app.get('/expenses/:id/edit', authenticate, async (req, res) => {
-  const expense = await Expense.findByPk(req.params.id);
-  if (!expense) return res.send('Expense not found');
-
-  if (expense.UserId !== req.user.id) return res.status(403).send('Forbidden');
-
-  const categories = await Category.findAll();
-
-  res.render('expense-form', {
-    title: 'Edit Expense',
-    expense,
-    categories,
-    action: `/expenses/${expense.id}?_method=PUT`
-  });
-});
-
-app.put('/expenses/:id', authenticate, async (req, res) => {
+ 
+// Get single expense (for modal)
+app.get('/api/expenses/:id', authenticate, async (req, res) => {
   try {
     const expense = await Expense.findByPk(req.params.id);
+    if (!expense) return res.status(404).json({ message: 'Expense not found' });
+    if (expense.UserId !== req.user.id) return res.status(403).json({ message: 'Forbidden' });
 
-    if (!expense) {
-      return res.status(404).json({ message: 'Expense not found' });
-    }
+    res.json(expense);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
-    // Ownership check
-    if (expense.UserId !== req.user.id) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
+// Update expense via AJAX
+app.put('/api/expenses/:id', authenticate, async (req, res) => {
+  try {
+    const expense = await Expense.findByPk(req.params.id);
+    if (!expense) return res.status(404).json({ message: 'Expense not found' });
+    if (expense.UserId !== req.user.id) return res.status(403).json({ message: 'Forbidden' });
 
-    // Update fields
     await expense.update({
       title: req.body.title,
       amount: req.body.amount,
@@ -245,15 +245,23 @@ app.put('/expenses/:id', authenticate, async (req, res) => {
       CategoryId: req.body.categoryId
     });
 
-   res.redirect('/expenses');
-
+    res.json({ message: 'Expense updated successfully', expense });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-
+// Get categories for dropdown
+app.get('/api/categories', authenticate, async (req, res) => {
+  try {
+    const categories = await Category.findAll();
+    res.json(categories);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 

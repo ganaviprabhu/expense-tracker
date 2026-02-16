@@ -1,27 +1,171 @@
 <h2>My Expenses</h2>
 
+
+<% totalExpense = typeof totalExpense !== 'undefined' ? totalExpense : 0; %>
+<h3>Total Expense: ₹<%= totalExpense.toLocaleString() %></h3>
+
+
 <a href="/expenses/new">+ Add Expense</a>
 
-<ul>
+<ul style="list-style: none; padding: 0;">
   <% expenses.forEach(e => { %>
-    <li>
-      <strong><%= e.title %></strong> –
-      ₹<%= e.amount %> –
-      <%= e.date.toDateString() %> –
-      <%= e.Category ? e.Category.name : 'No category' %>
-      <!-- EDIT FORM -->
-      <a href="/expenses/<%= e.id %>/edit" style="color:blue;">Edit</a>
+    
+    <li class="expense-item">
+      
+      <div class="expense-info">
+        <strong><%= e.title %></strong> –
+        ₹<%= e.amount %> –
+        <%= e.date.toDateString() %> –
+        <%= e.Category ? e.Category.name : 'No category' %>
+      </div>
 
-      <!-- DELETE BUTTON -->
-      <form 
-        action="/expenses/<%= e.id %>/delete" 
-        method="POST" 
-        style="display:inline;"
-      >
-        <button type="submit" style="color:red;">
-          Delete
+      <div class="actions">
+        <!-- EDIT -->
+        <button class="editBtn icon-btn edit-icon" 
+                data-id="<%= e.id %>" 
+                title="Edit">
+          <i class="fas fa-pen"></i>
         </button>
-      </form>
+
+        <!-- DELETE -->
+        <form action="/expenses/<%= e.id %>/delete" 
+              method="POST">
+          <button type="submit" 
+                  class="icon-btn delete-icon"
+                  title="Delete">
+            <i class="fas fa-trash"></i>
+          </button>
+        </form>
+      </div>
+
     </li>
+
   <% }) %>
 </ul>
+
+
+<!-- Edit Expense Modal -->
+<div id="editModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span id="closeModal" style="float:right; cursor:pointer;">&times;</span>
+    <h2>Edit Expense</h2>
+    <form id="editForm">
+      <input type="hidden" id="expenseId">
+
+      <label>Title:</label>
+      <input type="text" id="expenseTitle" required>
+
+      <label>Amount:</label>
+      <input type="number" id="expenseAmount" required>
+
+      <label>Date:</label>
+      <input type="date" id="expenseDate" required>
+
+      <label>Category:</label>
+      <select id="expenseCategory"></select>
+
+      <button type="submit">Save</button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .modal { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+  }
+  .modal-content { background: white; padding: 20px; border-radius: 5px; width: 400px; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const editModal = document.getElementById('editModal');
+  const closeModal = document.getElementById('closeModal');
+  const editForm = document.getElementById('editForm');
+  const categorySelect = document.getElementById('expenseCategory');
+
+  // Close modal on cross button click
+  if(closeModal){
+    closeModal.addEventListener('click',() => {
+      editModal.style.display = 'none';
+    });
+  }
+
+  // Close modal when clicking outside the modal content
+  window.onclick = (event) => {
+    if (event.target === editModal) {
+      editModal.style.display = 'none';
+    }
+  };
+
+  // Open modal when Edit button is clicked
+  document.querySelectorAll('.editBtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const expenseId = btn.dataset.id;
+
+      try {
+        // Fetch expense data
+        const res = await fetch(`/api/expenses/${expenseId}`);
+        if (!res.ok) throw new Error('Failed to fetch expense');
+        const expense = await res.json();
+
+        // Fill form fields
+        document.getElementById('expenseId').value = expense.id;
+        document.getElementById('expenseTitle').value = expense.title;
+        document.getElementById('expenseAmount').value = expense.amount;
+        document.getElementById('expenseDate').value = expense.date.split('T')[0];
+
+        // Fetch categories
+        const catRes = await fetch('/api/categories');
+        if (!catRes.ok) throw new Error('Failed to fetch categories');
+        const categories = await catRes.json();
+
+        categorySelect.innerHTML = '';
+        categories.forEach(c => {
+          const selected = c.id === expense.CategoryId ? 'selected' : '';
+          categorySelect.innerHTML += `<option value="${c.id}" ${selected}>${c.name}</option>`;
+        });
+
+        // Show modal
+        editModal.style.display = 'flex';
+      } catch (err) {
+        alert(err.message);
+        console.error(err);
+      }
+    });
+  });
+
+  // Submit updated expense via AJAX
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('expenseId').value;
+
+    const data = {
+      title: document.getElementById('expenseTitle').value,
+      amount: document.getElementById('expenseAmount').value,
+      date: document.getElementById('expenseDate').value,
+      categoryId: document.getElementById('expenseCategory').value
+    };
+
+    try {
+      const res = await fetch(`/api/expenses/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok && result.message) {
+        alert(result.message);
+        editModal.style.display = 'none';
+        location.reload(); // refresh page to show updated expense
+      } else {
+        alert(result.message || 'Failed to update expense');
+      }
+    } catch (err) {
+      alert('Error updating expense');
+      console.error(err);
+    }
+  });
+});
+</script>
