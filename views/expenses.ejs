@@ -1,47 +1,59 @@
-<h2>My Expenses</h2>
+<div class="dashboard-container">
 
+  <div class="card">
+    <div class="expense-header">
+    <h2>My Expenses</h2>
+    <a href="/expenses/new" class="add-expense-btn">
+      + Add Expense
+    </a>
+    </div>
+    <% if (expenses.length === 0) { %>
+      <p class="empty-text">No expenses added yet.</p>
+    <% } %>
 
-<% totalExpense = typeof totalExpense !== 'undefined' ? totalExpense : 0; %>
-<h3>Total Expense: ₹<%= totalExpense.toLocaleString() %></h3>
+    <% expenses.forEach(e => { %>
 
+      <div class="expense-item">
 
-<a href="/expenses/new">+ Add Expense</a>
+        <div>
+          <strong><%= e.title %></strong><br>
+          ₹<%= e.amount %> • 
+          <%= e.date.toDateString() %> • 
+          <%= e.Category ? e.Category.name : 'No category' %>
+        </div>
 
-<ul style="list-style: none; padding: 0;">
-  <% expenses.forEach(e => { %>
-    
-    <li class="expense-item">
-      
-      <div class="expense-info">
-        <strong><%= e.title %></strong> –
-        ₹<%= e.amount %> –
-        <%= e.date.toDateString() %> –
-        <%= e.Category ? e.Category.name : 'No category' %>
-      </div>
+        <div class="actions">
 
-      <div class="actions">
-        <!-- EDIT -->
-        <button class="editBtn icon-btn edit-icon" 
-                data-id="<%= e.id %>" 
-                title="Edit">
-          <i class="fas fa-pen"></i>
-        </button>
-
-        <!-- DELETE -->
-        <form action="/expenses/<%= e.id %>/delete" 
-              method="POST">
-          <button type="submit" 
-                  class="icon-btn delete-icon"
-                  title="Delete">
-            <i class="fas fa-trash"></i>
+          <!-- Edit -->
+          <button class="editBtn" data-id="<%= e.id %>">
+            <i class="fas fa-pen"></i>
           </button>
-        </form>
+
+
+          <!-- Delete -->
+          <form action="/expenses/<%= e.id %>/delete" method="POST">
+            <button type="submit" class="icon-btn delete-icon">
+              <i class="fas fa-trash"></i>
+            </button>
+          </form>
+
+          
+
+        </div>
+
       </div>
+      
 
-    </li>
+    <% }) %>
+    <% totalExpense = typeof totalExpense !== 'undefined' ? totalExpense : 0; %>
+    <p class="total-text">
+      Total Expense: ₹<%= totalExpense.toLocaleString() %>
+    </p>
 
-  <% }) %>
-</ul>
+
+  </div>
+
+</div>
 
 
 <!-- Edit Expense Modal -->

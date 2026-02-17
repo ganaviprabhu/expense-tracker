@@ -8,18 +8,28 @@
 <body>
 
   <% if (user) { %>
-    <p>Welcome, <%= user.username %></p>
-    <nav>
-      <a href="/expenses">Expenses</a>
-      <form action="/logout" method="POST" style="display:inline;">
-        <button type="submit">Logout</button>
+  <header class="dashboard-header">
+    <div class="welcome-text">
+      Welcome, <span><%= user.username %></span>
+    </div>
+
+    <div class="header-actions">
+      <a href="/expenses" class="expenses-btn">Expenses</a>
+
+      <form action="/logout" method="POST">
+        <button type="submit" class="logout-btn">Logout</button>
       </form>
-    </nav>
-  <% } else { %>
+    </div>
+  </header>
+<% } else { %>
+ 
     <nav>
-      <a href="/login">Login</a>
-      <a href="/signup">Sign Up</a>
+    <a href="/login" class="<%= currentPage === 'login' ? 'active' : '' %>">Login</a>
+    <a href="/signup" class="<%= currentPage === 'signup' ? 'active' : '' %>">Sign Up</a>
+
     </nav>
+ 
+    
   <% } %>
 
   <% if (error) { %>

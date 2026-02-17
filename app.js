@@ -58,7 +58,10 @@ const authenticate = async (req, res, next) => {
 
 // Signup
 app.get('/signup', (req, res) => {
-  res.render('signup', { title: 'Sign Up' });
+  res.render('signup', {
+     title: 'Sign Up',
+     currentPage: 'signup'
+   });
 });
 
 app.post('/signup', async (req, res) => {
@@ -80,7 +83,10 @@ app.post('/signup', async (req, res) => {
 
 // Login
 app.get('/login', (req, res) => {
-  res.render('login', { title: 'Login' });
+  res.render('login', { 
+    title: 'Login',
+    currentPage: 'login'
+   });
 });
 
 app.post('/login', async (req, res) => {

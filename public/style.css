@@ -1,120 +1,280 @@
+/* ================= RESET ================= */
 * {
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
   margin: 0;
-  padding: 20px;
-  background: #f5f5f5;
+  padding: 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+.expense-header h2 {
+  margin-bottom: 12px;
 }
 
-/* Overlay */
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
+/* ================= BODY ================= */
+body {
+  min-height: 100vh;
+  background: #f4f6fb; /* soft neutral background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
 }
 
-/* Navigation */
+/* ================= NAVIGATION ================= */
 nav {
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1000;
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
 }
 
 nav a {
-  margin-right: 15px;
   text-decoration: none;
+  padding: 8px 22px;
+  font-weight: 600;
+  color: #444;
+  border-radius: 25px;
+  transition: 0.3s ease;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+nav a:hover {
+  background: #eef1ff;
+}
+
+nav a.active {
+  background: #667eea;
+  color: white;
+}
+
+/* ================= DASHBOARD HEADER ================= */
+.dashboard-header {
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 15px 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.welcome-text {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.welcome-text span {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.expenses-btn {
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  background: #e9ecff;
   color: #333;
-  font-weight: bold;
+  font-weight: 500;
+  transition: 0.2s ease;
 }
 
-nav button {
-  background: none;
+.expenses-btn:hover {
+  background: #dfe3ff;
+}
+
+.logout-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
   border: none;
-  color: #c00;
+  background: #667eea;
+  color: white;
+  font-weight: 500;
   cursor: pointer;
-  font-weight: bold;
-  margin: 0; /* prevent global spacing */
+  transition: 0.2s ease;
 }
 
-/* Forms */
-.main-form {
-  max-width: 400px;
-  background: #fff;
+.logout-btn:hover {
+  background: #5a67d8;
+}
+
+/* ================= CONTAINER ================= */
+.dashboard-container {
+  width: 100%;
+  max-width: 600px;
   padding: 20px;
-  border-radius: 8px;
-}
-.actions form {
-  all: unset;          /* removes inherited form styles */
-  display: inline;     /* keeps layout inline */
 }
 
+/* ================= CARD STYLE ================= */
+.card,
+.main-form,
+.expense-card,
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+/* ================= TITLES ================= */
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* ================= FORMS ================= */
+form {
+  display: flex;
+  flex-direction: column;
+}
 
 label {
-  display: block;
-  margin-top: 10px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #444;
 }
 
 input,
 select {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 11px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: 0.2s ease;
+  font-size: 14px;
+  background: #fafbff;
 }
 
-/* Default button (for normal buttons only) */
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  background: white;
+}
+
+/* ================= BUTTONS ================= */
 button {
-  margin-top: 15px;
-  padding: 8px 12px;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* Expense List Item */
+button:hover {
+  background: #5a67d8;
+  transform: translateY(-2px);
+}
+
+/* ================= LOGIN PAGE ================= */
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 80px;
+}
+
+/* ===== EXPENSE PAGE ===== */
+
+.total-text {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.add-expense-btn {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.add-expense-btn:hover {
+  background: #5a67d8;
+}
+
+.empty-text {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+}
+
 .expense-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  background: #fff;
-  transition: background 0.2s ease;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: #f8f9ff;
+  transition: 0.2s ease;
 }
 
 .expense-item:hover {
-  background: #f0f0f0;
+  transform: translateY(-2px);
 }
 
-/* Action buttons container */
+
+/* ================= EXPENSE LIST ================= */
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease;
+}
+
+.expense-item:hover {
+  transform: translateY(-3px);
+}
+
+/* ================= ACTION BUTTONS ================= */
 .actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
-/* Icon buttons (edit/delete) */
 .icon-btn {
-  background: transparent !important;
-  border: none !important;
-  padding: 6px !important;
-  margin: 0 !important; /* removes global margin-top */
+  background: transparent;
+  border: none;
+  padding: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 6px;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: 0.2s ease;
 }
 
 .icon-btn:hover {
   background: rgba(0, 0, 0, 0.05);
-  transform: scale(1.05);
-}
-
-.icon-btn:focus {
-  outline: none;
 }
 
 .edit-icon {
@@ -125,30 +285,41 @@ button {
   color: #dc2626;
 }
 
-/* Tables */
+/* ================= TABLES ================= */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 th,
 td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 14px;
+  text-align: left;
 }
 
 th {
-  background: #eee;
+  background: #667eea;
+  color: white;
+  font-weight: 600;
 }
 
-/* Messages */
+tr:nth-child(even) {
+  background: #f7f8ff;
+}
+
+/* ================= MESSAGES ================= */
 .error {
-  color: red;
-  margin-bottom: 10px;
+  color: #dc2626;
+  margin-bottom: 15px;
+  font-weight: 500;
 }
 
 .success {
-  color: green;
-  margin-bottom: 10px;
+  color: #16a34a;
+  margin-bottom: 15px;
+  font-weight: 500;
 }
